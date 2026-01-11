@@ -6,9 +6,11 @@ from bleak import BleakClient
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.backends import default_backend
 
+
+#E1:BB:8E:F3:A5:C0;4dc98efade9c66bb0aba6f6e18528ec2
 # --- KONFIGURACJA ---
-MAC_ADDRESS = "FB:5D:2D:49:5A:2A"
-AUTH_KEY_HEX = "A453B47B6646C8B4F76EA88A44D66F32"
+MAC_ADDRESS = "E1:BB:8E:F3:A5:C0"
+AUTH_KEY_HEX = "4dc98efade9c66bb0aba6f6e18528ec2"
 AUTH_KEY = bytes.fromhex(AUTH_KEY_HEX)
 
 # UUIDs

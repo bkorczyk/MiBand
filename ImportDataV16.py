@@ -7,44 +7,12 @@ from bleak import BleakClient
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.backends import default_backend
 
+
 # --- KONFIGURACJA ---
-#MAC_ADDR = "C3:0F:6C:1F:EF:57"
-#AUTH_KEY_HEX = "1b813e705e884c5046aeba4ada347f6d"
-#AUTH_KEY = bytes.fromhex(AUTH_KEY_HEX)
+MAC_ADDR = "E1:BB:8E:F3:A5:C0"
+AUTH_KEY_HEX = "4dc98efade9c66bb0aba6f6e18528ec2"
+AUTH_KEY = bytes.fromhex(AUTH_KEY_HEX)
 
-# Argumenty linii poleceń
-parser = argparse.ArgumentParser(description="Mi Band 4 - odczyt danych po uwierzytelnieniu")
-parser.add_argument("config_file", type=str, help="Ścieżka do pliku konfiguracyjnego (format: MAC_ADDR;AUTH_KEY_HEX)")
-args = parser.parse_args()
-
-# Odczyt z pliku
-try:
-    with open(args.config_file, "r") as f:
-        line = f.read().strip()
-        parts = line.split(";")
-        if len(parts) != 2:
-            raise ValueError("Nieprawidłowy format pliku: oczekuje dokładnie jednego ';'")
-        
-        MAC_ADDR = parts[0].strip()
-        AUTH_KEY_HEX = parts[1].strip()
-        
-        # Walidacja MAC
-        if len(MAC_ADDR) != 17 or MAC_ADDR.count(":") != 5:
-            raise ValueError(f"Nieprawidłowy format MAC: {MAC_ADDR} (oczekiwany: xx:xx:xx:xx:xx:xx)")
-        
-        # Walidacja Auth Key
-        if len(AUTH_KEY_HEX) != 32 or not all(c in "0123456789abcdefABCDEF" for c in AUTH_KEY_HEX):
-            raise ValueError(f"Nieprawidłowy format Auth Key: {AUTH_KEY_HEX} (oczekiwany: dokładnie 32 znaki hex)")
-        
-        AUTH_KEY = bytes.fromhex(AUTH_KEY_HEX)
-        
-        print(f"Wczytano: MAC = {MAC_ADDR}, Auth Key = {AUTH_KEY_HEX}")
-except FileNotFoundError:
-    print(f"Błąd: Plik '{args.config_file}' nie istnieje")
-    exit(1)
-except Exception as e:
-    print(f"Błąd odczytu pliku: {e}")
-    exit(1)
 
 # UUID charakterystyk (z Twoich logów bluetoothctl)
 UUID_AUTH = "00000009-0000-3512-2118-0009af100700"

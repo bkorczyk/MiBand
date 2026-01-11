@@ -6,8 +6,9 @@ import pandas as pd
 from datetime import datetime
 
 # --- KONFIGURACJA ---
-MAC_ADDRESS = "C3:0F:6C:1F:EF:57"
-AUTH_KEY_HEX = "1b813e705e884c5046aeba4ada347f6d"
+# --- KONFIGURACJA ---
+MAC_ADDRESS = "E1:BB:8E:F3:A5:C0"
+AUTH_KEY_HEX = "4dc98efade9c66bb0aba6f6e18528ec2"
 AUTH_KEY = bytes.fromhex(AUTH_KEY_HEX)
 
 UUID_AUTH = "00000009-0000-3512-2118-0009af100700"
