@@ -1,3 +1,4 @@
+import argparse
 import asyncio
 from bleak import BleakClient
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
@@ -8,9 +9,43 @@ from datetime import datetime
 # --- KONFIGURACJA ---
 # --- KONFIGURACJA ---
 #MAC_ADDRESS = "DF:D4:C3:61:45:5C"
-MAC_ADDRESS = "F7:00:2D:60:FE:A8"
-AUTH_KEY_HEX = "97b11418379005f4aabb4fd69a788483"
-AUTH_KEY = bytes.fromhex(AUTH_KEY_HEX)
+#MAC_ADDRESS = "F7:00:2D:60:FE:A8"
+#AUTH_KEY_HEX = "97b11418379005f4aabb4fd69a788483"
+#AUTH_KEY = bytes.fromhex(AUTH_KEY_HEX)
+
+# Argumenty linii poleceń
+parser = argparse.ArgumentParser(description="Mi Band 4 - odczyt danych po uwierzytelnieniu")
+parser.add_argument("config_file", type=str, help="Ścieżka do pliku konfiguracyjnego (format: MAC_ADDR;AUTH_KEY_HEX)")
+args = parser.parse_args()
+
+# Odczyt z pliku
+try:
+    with open(args.config_file, "r") as f:
+        line = f.read().strip()
+        parts = line.split(";")
+        if len(parts) != 2:
+            raise ValueError("Nieprawidłowy format pliku: oczekuje dokładnie jednego ';'")
+        
+        MAC_ADDR = parts[0].strip()
+        AUTH_KEY_HEX = parts[1].strip()
+        
+        # Walidacja MAC
+        if len(MAC_ADDR) != 17 or MAC_ADDR.count(":") != 5:
+            raise ValueError(f"Nieprawidłowy format MAC: {MAC_ADDR} (oczekiwany: xx:xx:xx:xx:xx:xx)")
+        
+        # Walidacja Auth Key
+        if len(AUTH_KEY_HEX) != 32 or not all(c in "0123456789abcdefABCDEF" for c in AUTH_KEY_HEX):
+            raise ValueError(f"Nieprawidłowy format Auth Key: {AUTH_KEY_HEX} (oczekiwany: dokładnie 32 znaki hex)")
+        
+        AUTH_KEY = bytes.fromhex(AUTH_KEY_HEX)
+        
+        print(f"Wczytano: MAC = {MAC_ADDR}, Auth Key = {AUTH_KEY_HEX}")
+except FileNotFoundError:
+    print(f"Błąd: Plik '{args.config_file}' nie istnieje")
+    exit(1)
+except Exception as e:
+    print(f"Błąd odczytu pliku: {e}")
+    exit(1)
 
 UUID_AUTH = "00000009-0000-3512-2118-0009af100700"
 UUID_STEPS = "00000007-0000-3512-2118-0009af100700"
@@ -75,5 +110,5 @@ class MiBand5Stable:
             print(f"Błąd podczas pracy: {e}")
 
 if __name__ == "__main__":
-    app = MiBand5Stable(MAC_ADDRESS, AUTH_KEY)
+    app = MiBand5Stable(MAC_ADDR, AUTH_KEY)
     asyncio.run(app.run())

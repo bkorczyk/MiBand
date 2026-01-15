@@ -9,8 +9,10 @@ from cryptography.hazmat.backends import default_backend
 
 #E1:BB:8E:F3:A5:C0;4dc98efade9c66bb0aba6f6e18528ec2
 # --- KONFIGURACJA ---
-MAC_ADDRESS = "E1:BB:8E:F3:A5:C0"
-AUTH_KEY_HEX = "4dc98efade9c66bb0aba6f6e18528ec2"
+#MAC_ADDRESS = "E1:BB:8E:F3:A5:C0"
+#AUTH_KEY_HEX = "4dc98efade9c66bb0aba6f6e18528ec2"
+MAC_ADDRESS = "F7:00:2D:60:FE:A8"
+AUTH_KEY_HEX = "97b11418379005f4aabb4fd69a788483"
 AUTH_KEY = bytes.fromhex(AUTH_KEY_HEX)
 
 # UUIDs
